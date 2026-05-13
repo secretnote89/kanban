@@ -118,7 +118,7 @@ async function signInWithGoogle() {
         const { data, error } = await supabaseClient.auth.signInWithOAuth({
             provider: 'google',
             options: {
-                redirectTo: window.location.origin + '/app.html'
+                redirectTo: window.location.origin + window.location.pathname.replace('index.html', 'app.html')
             }
         });
 
@@ -137,7 +137,7 @@ async function signInWithGithub() {
         const { data, error } = await supabaseClient.auth.signInWithOAuth({
             provider: 'github',
             options: {
-                redirectTo: window.location.origin + '/app.html'
+                redirectTo: window.location.origin + window.location.pathname.replace('index.html', 'app.html')
             }
         });
 
