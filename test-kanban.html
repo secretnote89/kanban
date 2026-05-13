@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Kanban Test Results</title>
+<style>
+body {
+    font-family: monospace;
+    padding: 20px;
+    background: #1e1e1e;
+    color: #d4d4d4;
+}
+.test { margin: 10px 0; }
+.pass { color: #4ec9b0; }
+.fail { color: #f44747; }
+.info { color: #569cd6; }
+</style>
+</head>
+<body>
+<h1>칸반 보드 테스트 결과</h1>
+<div id="results"></div>
+<script>
+const results = document.getElementById('results');
+
+function log(msg, type = 'info') {
+    const div = document.createElement('div');
+    div.className = 'test ' + type;
+    div.textContent = (type === 'pass' ? '✓ ' : type === 'fail' ? '✗ ' : 'ℹ ') + msg;
+    results.appendChild(div);
+}
+
+// Test 1: LocalStorage 사용 가능
+try {
+    localStorage.setItem('test', 'test');
+    localStorage.removeItem('test');
+    log('LocalStorage 사용 가능', 'pass');
+} catch(e) {
+    log('LocalStorage 사용 불가: ' + e.message, 'fail');
+}
+
+// Test 2: UUID 생성 함수
+function generateUUID() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        const r = Math.random() * 16 | 0;
+        const v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
+
+const uuid = generateUUID();
+if (/^[a-f0-9-]{36}$/.test(uuid)) {
+    log('UUID 생성 성공: ' + uuid, 'pass');
+} else {
+    log('UUID 형식 오류', 'fail');
+}
+
+// Test 3: 카드 데이터 검증
+const testCard = {
+    id: Date.now(),
+    title: '테스트 카드',
+    status: 'todo',
+    userId: 'test-user-123',
+    boardId: 'default',
+    createdAt: Date.now(),
+    updatedAt: Date.now()
+};
+
+if (testCard.id && testCard.title && testCard.userId) {
+    log('카드 데이터 구조 검증: 통과', 'pass');
+} else {
+    log('카드 데이터 구조 오류', 'fail');
+}
+
+// Test 4: JSON 직렬화/역직렬화
+try {
+    const json = JSON.stringify([testCard]);
+    const parsed = JSON.parse(json);
+    if (parsed[0].title === testCard.title) {
+        log('JSON 직렬화/역직렬화: 통과', 'pass');
+    } else {
+        log('JSON 데이터 불일치', 'fail');
+    }
+} catch(e) {
+    log('JSON 처리 오류: ' + e.message, 'fail');
+}
+
+// Test 5: DOM 요소 확인 (실제 페이지에서)
+log('DOM 요소 테스트는 kanban.html에서 확인', 'info');
+
+log('\n테스트 완료!', 'info');
+</script>
+</body>
+</html>

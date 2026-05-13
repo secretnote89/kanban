@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>칸반 보드</title>
+    <link rel="stylesheet" href="kanban.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>칸반 보드</h1>
+            <div class="user-info">
+                <span id="userIdDisplay">사용자: 로딩 중...</span>
+            </div>
+        </div>
+
+        <div class="kanban-board">
+            <div class="column" data-status="todo">
+                <div class="column-header">
+                    <h2>To-Do</h2>
+                    <span class="count">0</span>
+                </div>
+                <div class="cards-container" id="todo"></div>
+                <button class="add-card-btn" data-column="todo">+ 카드 추가</button>
+            </div>
+
+            <div class="column" data-status="in-progress">
+                <div class="column-header">
+                    <h2>In Progress</h2>
+                    <span class="count">0</span>
+                </div>
+                <div class="cards-container" id="in-progress"></div>
+                <button class="add-card-btn" data-column="in-progress">+ 카드 추가</button>
+            </div>
+
+            <div class="column" data-status="done">
+                <div class="column-header">
+                    <h2>Done</h2>
+                    <span class="count">0</span>
+                </div>
+                <div class="cards-container" id="done"></div>
+                <button class="add-card-btn" data-column="done">+ 카드 추가</button>
+            </div>
+        </div>
+
+        <div class="footer">
+            <button class="footer-btn" id="exportBtn">💾 데이터 내보내기</button>
+            <button class="footer-btn" id="importBtn">📂 데이터 가져오기</button>
+            <button class="footer-btn danger" id="clearBtn">🗑️ 데이터 초기화</button>
+            <input type="file" id="importFile" accept=".json" style="display: none;">
+        </div>
+    </div>
+
+    <div class="modal" id="cardModal">
+        <div class="modal-content">
+            <h2>새 카드 추가</h2>
+            <input type="text" id="cardTitle" placeholder="카드 제목을 입력하세요" autofocus>
+            <div class="modal-buttons">
+                <button id="addCardBtn">추가</button>
+                <button id="cancelBtn">취소</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="kanban.js"></script>
+</body>
+</html>

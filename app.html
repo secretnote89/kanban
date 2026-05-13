@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>칸반 보드</title>
+    <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>칸반 보드</h1>
+            <div class="user-info">
+                <span id="userIdDisplay">로딩 중...</span>
+                <button class="logout-btn" id="logoutBtn" style="display:none;">로그아웃</button>
+                <button class="login-btn" id="loginBtn" style="display:none;">로그인</button>
+            </div>
+        </div>
+
+        <div class="kanban-board">
+            <div class="column" data-status="todo">
+                <div class="column-header">
+                    <h2>To-Do</h2>
+                    <span class="count">0</span>
+                </div>
+                <div class="cards-container" id="todo"></div>
+                <button class="add-card-btn" data-column="todo">+ 카드 추가</button>
+            </div>
+
+            <div class="column" data-status="in-progress">
+                <div class="column-header">
+                    <h2>In Progress</h2>
+                    <span class="count">0</span>
+                </div>
+                <div class="cards-container" id="in-progress"></div>
+                <button class="add-card-btn" data-column="in-progress">+ 카드 추가</button>
+            </div>
+
+            <div class="column" data-status="done">
+                <div class="column-header">
+                    <h2>Done</h2>
+                    <span class="count">0</span>
+                </div>
+                <div class="cards-container" id="done"></div>
+                <button class="add-card-btn" data-column="done">+ 카드 추가</button>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="modal" id="cardModal">
+        <div class="modal-content">
+            <h2>새 카드 추가</h2>
+            <input type="text" id="cardTitle" placeholder="카드 제목을 입력하세요" autofocus>
+            <div class="modal-buttons">
+                <button id="addCardBtn">추가</button>
+                <button id="cancelBtn">취소</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="kanban.js"></script>
+    <script>
+        // Override initialization for guest mode support
+        window.addEventListener('DOMContentLoaded', async () => {
+            console.log('App initializing with auth check...');
+
+            initSupabase();
+
+            // Check if logged in
+            const isAuthenticated = await checkAuth();
+
+            const userDisplay = document.getElementById('userIdDisplay');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const loginBtn = document.getElementById('loginBtn');
+
+            if (isAuthenticated && currentUser) {
+                // Logged in mode
+                isGuest = false;
+                userDisplay.textContent = currentUser.email || '로그인됨';
+                logoutBtn.style.display = 'block';
+                loginBtn.style.display = 'none';
+                console.log('Running in authenticated mode:', currentUser.email);
+            } else {
+                // Guest mode - use existing Phase 2 LocalStorage logic
+                isGuest = true;
+                userDisplay.textContent = '🎭 게스트 모드';
+                logoutBtn.style.display = 'none';
+                loginBtn.style.display = 'block';
+                console.log('Running in guest mode (LocalStorage)');
+            }
+
+            // Login button handler
+            loginBtn.addEventListener('click', () => {
+                window.location.href = 'index.html';
+            });
+
+            // Logout button handler
+            logoutBtn.addEventListener('click', signOut);
+        });
+    </script>
+</body>
+</html>
